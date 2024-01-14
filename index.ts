@@ -1,7 +1,9 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import * as YAML from "yamljs";
-import { auctionRouter } from "./src/app/routes/auction.route";
+import { router as auctionRouter } from "./src/app/routes/auction.route";
+import { createContainer } from "./src/app/container";
+import { inMemoryDatabaseClient } from "./src/infrastructure/database/in-memory/client";
 
 const swaggerDocument = YAML.load("./api-spec.yaml");
 
@@ -9,11 +11,13 @@ const port = 3000;
 
 const app = express();
 
+const container = createContainer(inMemoryDatabaseClient);
+
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/auctions", auctionRouter);
+app.use("/auctions", auctionRouter(container));
 
 export const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
