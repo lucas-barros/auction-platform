@@ -1,39 +1,42 @@
-import { createAuctionRepository } from "../domain/repositories/auction.repository";
-import { createBidRepository } from "../domain/repositories/bid.repository";
-import { createUserRepository } from "../domain/repositories/user.repository";
-import { auctionService } from "../domain/services/auction.service";
-import { createAuctionUseCase } from "../domain/use-cases/auction.case";
-import { IDatabaseClient } from "../infrastructure/database/database";
 import {
-  AuctionController,
-  createAuctionController,
-} from "./controllers/auction.controller";
+  AuctionRepository,
+  createAuctionRepository,
+} from "../domain/repositories/auction.repository";
+import {
+  BidRepository,
+  createBidRepository,
+} from "../domain/repositories/bid.repository";
+import {
+  UserRepository,
+  createUserRepository,
+} from "../domain/repositories/user.repository";
+import { IDatabaseClient } from "../infrastructure/database/database";
 import {
   AuthenticationMiddleware,
   createAuthenticationMiddleware,
 } from "./middlewares/authentication";
 
 export interface Container {
-  controller: {
-    auction: AuctionController;
+  repository: {
+    auction: AuctionRepository;
+    bid: BidRepository;
+    user: UserRepository;
   };
   middleware: {
     authentication: AuthenticationMiddleware;
   };
 }
 
-export const createContainer = (databaseClint: IDatabaseClient) => {
+export const createContainer = (databaseClint: IDatabaseClient): Container => {
   const userRepository = createUserRepository(databaseClint);
   const auctionRepository = createAuctionRepository(databaseClint);
   const bidRepository = createBidRepository(databaseClint);
-  const auctionUseCase = createAuctionUseCase(
-    auctionRepository,
-    bidRepository,
-    auctionService
-  );
+
   return {
-    controller: {
-      auction: createAuctionController(auctionUseCase),
+    repository: {
+      auction: auctionRepository,
+      bid: bidRepository,
+      user: userRepository,
     },
     middleware: {
       authentication: createAuthenticationMiddleware(userRepository),

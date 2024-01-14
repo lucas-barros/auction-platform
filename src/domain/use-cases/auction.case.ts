@@ -21,9 +21,11 @@ export interface AuctionUseCase {
 }
 
 export const createAuctionUseCase = (
-  auctionRepository: AuctionRepository,
-  bidRepository: BidRepository,
-  auctionService: AuctionService
+  repositories: {
+    auction: AuctionRepository;
+    bid: BidRepository;
+  },
+  service: AuctionService
 ): AuctionUseCase => {
   return {
     create: ({ title, endTime }) => {
@@ -32,7 +34,7 @@ export const createAuctionUseCase = (
       }
       const auction = new Auction({ title, endTime });
 
-      auctionRepository.create(auction.toJson());
+      repositories.auction.create(auction.toJson());
 
       return new Ok(auction.getId());
     },
@@ -41,7 +43,7 @@ export const createAuctionUseCase = (
       if (typeof value !== "number" || !auctionId || !username) {
         return new Err(AuctionException.InvalidData);
       }
-      const auctionResult = auctionRepository.getById(auctionId);
+      const auctionResult = repositories.auction.getById(auctionId);
 
       if (auctionResult === undefined) {
         return new Err(AuctionException.NotFound);
@@ -55,7 +57,7 @@ export const createAuctionUseCase = (
 
       const bid = new Bid({ username, auctionId, value });
 
-      bidRepository.create(bid.toJson());
+      repositories.bid.create(bid.toJson());
 
       return new Ok(bid.getId());
     },
@@ -65,23 +67,23 @@ export const createAuctionUseCase = (
         return new Err(AuctionException.InvalidData);
       }
 
-      const auctionResult = auctionRepository.getById(id);
+      const auctionResult = repositories.auction.getById(id);
 
       if (auctionResult === undefined) {
         return new Err(AuctionException.NotFound);
       }
 
       const auction = new Auction(auctionResult);
-      const bidsResult = bidRepository.getByAuctionId(id);
+      const bidsResult = repositories.bid.getByAuctionId(id);
       const bids = bidsResult.map((bid) => new Bid(bid));
 
       if (!auction.getWinnerUsername()) {
-        const winnerUsername = auctionService.computeAuctionWinnerUsername(
+        const winnerUsername = service.computeAuctionWinnerUsername(
           auction,
           bids
         );
         auction.setWinnerUsername(winnerUsername);
-        auctionRepository.updateById(id, auction.toJson());
+        repositories.auction.updateById(id, auction.toJson());
       }
 
       return new Ok(auction.toJson());
