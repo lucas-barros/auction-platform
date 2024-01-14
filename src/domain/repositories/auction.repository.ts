@@ -1,30 +1,20 @@
 import { IDatabaseClient } from "../../infrastructure/database/database";
 
-export class AuctionRepository {
-  constructor(private database: IDatabaseClient) {}
-
-  create(auction: {
+export interface AuctionRepository {
+  create: (auction: {
     id: string;
     title: string;
     endTime: string;
     winnerUsername: string | null;
-  }): void {
-    this.database.insert("auctions", auction);
-  }
-
-  getById(id: string):
+  }) => void;
+  getById: (id: string) =>
     | {
         id: string;
         title: string;
         endTime: string;
       }
-    | undefined {
-    return this.database
-      .select("auctions")
-      .find((auction) => auction.id === id);
-  }
-
-  updateById(
+    | undefined;
+  updateById: (
     id: string,
     newValue: {
       id: string;
@@ -32,13 +22,29 @@ export class AuctionRepository {
       endTime: string;
       winnerUsername: string | null;
     }
-  ) {
-    const updated = this.database.select("auctions").map((auction) => {
-      if (auction.id === id) {
-        return newValue;
-      }
-      return auction;
-    });
-    this.database.update("auctions", updated);
-  }
+  ) => void;
 }
+
+export const createAuctionRepository = (
+  database: IDatabaseClient
+): AuctionRepository => {
+  return {
+    create: (auction) => {
+      database.insert("auctions", auction);
+    },
+
+    getById: (id) => {
+      return database.select("auctions").find((auction) => auction.id === id);
+    },
+
+    updateById: (id, newValue) => {
+      const updated = database.select("auctions").map((auction) => {
+        if (auction.id === id) {
+          return newValue;
+        }
+        return auction;
+      });
+      database.update("auctions", updated);
+    },
+  };
+};

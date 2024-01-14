@@ -1,6 +1,6 @@
 import express from "express";
 
-import { AuthorizationMiddleware } from "../middlewares/authorization";
+import { authorizationMiddleware } from "../middlewares/authorization";
 
 import { AuctionParamsDTO, PlaceBidParamsDTO } from "../dtos/auction.dto";
 import { Container } from "../container";
@@ -8,28 +8,24 @@ import { Container } from "../container";
 export const router = (container: Container) => {
   const router = express.Router();
 
-  router.use(
-    container.middleware.authentication.basicAuthMiddleware.bind(
-      container.middleware.authentication
-    )
-  );
+  router.use(container.middleware.authentication.basicAuthMiddleware);
 
   router.post(
     "/",
-    AuthorizationMiddleware.canCreateAuction,
-    container.controller.auction.create.bind(container.controller.auction)
+    authorizationMiddleware.canCreateAuction,
+    container.controller.auction.create
   );
 
   router.post<PlaceBidParamsDTO>(
     "/:id/bid",
-    AuthorizationMiddleware.canBid,
-    container.controller.auction.placeBid.bind(container.controller.auction)
+    authorizationMiddleware.canBid,
+    container.controller.auction.placeBid
   );
 
   router.get<AuctionParamsDTO>(
     "/:id",
-    AuthorizationMiddleware.canViewAuction,
-    container.controller.auction.getById.bind(container.controller.auction)
+    authorizationMiddleware.canViewAuction,
+    container.controller.auction.getById
   );
 
   return router;

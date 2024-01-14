@@ -1,11 +1,23 @@
 import { IDatabaseClient } from "../../infrastructure/database/database";
 
-export class UserRepository {
-  constructor(private database: IDatabaseClient) {}
-
-  geByUsername(username: string) {
-    return this.database
-      .select("users")
-      .find((user) => user.username === username);
-  }
+export interface UserRepository {
+  geByUsername(username: string):
+    | {
+        username: string;
+        password: string;
+        permissions: string[];
+      }
+    | undefined;
 }
+
+export const createUserRepository = (
+  database: IDatabaseClient
+): UserRepository => {
+  return {
+    geByUsername: (username) => {
+      return database
+        .select("users")
+        .find((user) => user.username === username);
+    },
+  };
+};

@@ -3,10 +3,8 @@ import { AuctionParamsDTO, PlaceBidParamsDTO } from "../dtos/auction.dto";
 
 export const FAILED_AUTHORIZATION = "Failed Authorization";
 
-export class AuthorizationMiddleware {
-  constructor() {}
-
-  static canCreateAuction(_: Request, res: Response, next: NextFunction) {
+export const authorizationMiddleware = {
+  canCreateAuction(_: Request, res: Response, next: NextFunction) {
     if (
       !res.locals.permissions?.find(
         (permission: string) => permission === "create_auction"
@@ -17,9 +15,8 @@ export class AuthorizationMiddleware {
     }
 
     next();
-  }
-
-  static canViewAuction(
+  },
+  canViewAuction(
     _: Request<AuctionParamsDTO>,
     res: Response,
     next: NextFunction
@@ -34,13 +31,8 @@ export class AuthorizationMiddleware {
     }
 
     next();
-  }
-
-  static canBid(
-    _: Request<PlaceBidParamsDTO>,
-    res: Response,
-    next: NextFunction
-  ) {
+  },
+  canBid(_: Request<PlaceBidParamsDTO>, res: Response, next: NextFunction) {
     if (
       !res.locals.permissions?.find(
         (permission: string) => permission === "bid"
@@ -51,5 +43,5 @@ export class AuthorizationMiddleware {
     }
 
     next();
-  }
-}
+  },
+};

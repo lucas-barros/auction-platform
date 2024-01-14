@@ -1,10 +1,17 @@
 import { Auction } from "../entities/auction.entity";
 import { Bid } from "../entities/bid.entity";
 
-export class AuctionService {
+export interface AuctionService {
+  computeAuctionWinnerUsername: (
+    auction: Auction,
+    bids: Bid[]
+  ) => string | null;
+}
+
+export const auctionService: AuctionService = {
   computeAuctionWinnerUsername(auction: Auction, bids: Bid[]) {
     const [firstBid, ...rest] = bids;
-    
+
     if (auction.getEndTime() > new Date()) {
       return null;
     }
@@ -22,5 +29,5 @@ export class AuctionService {
     }, firstBid);
 
     return winnerBid?.getUsername() ?? null;
-  }
-}
+  },
+};

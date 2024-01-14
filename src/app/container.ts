@@ -1,11 +1,17 @@
-import { AuctionRepository } from "../domain/repositories/auction.repository";
-import { BidRepository } from "../domain/repositories/bid.repository";
-import { UserRepository } from "../domain/repositories/user.repository";
-import { AuctionService } from "../domain/services/auction.service";
-import { AuctionUseCase } from "../domain/use-cases/auction.case";
+import { createAuctionRepository } from "../domain/repositories/auction.repository";
+import { createBidRepository } from "../domain/repositories/bid.repository";
+import { createUserRepository } from "../domain/repositories/user.repository";
+import { auctionService } from "../domain/services/auction.service";
+import { createAuctionUseCase } from "../domain/use-cases/auction.case";
 import { IDatabaseClient } from "../infrastructure/database/database";
-import { AuctionController } from "./controllers/auction.controller";
-import { AuthenticationMiddleware } from "./middlewares/authentication";
+import {
+  AuctionController,
+  createAuctionController,
+} from "./controllers/auction.controller";
+import {
+  AuthenticationMiddleware,
+  createAuthenticationMiddleware,
+} from "./middlewares/authentication";
 
 export interface Container {
   controller: {
@@ -17,21 +23,20 @@ export interface Container {
 }
 
 export const createContainer = (databaseClint: IDatabaseClient) => {
-  const userRepository = new UserRepository(databaseClint);
-  const auctionRepository = new AuctionRepository(databaseClint);
-  const bidRepository = new BidRepository(databaseClint);
-  const auctionService = new AuctionService();
-  const auctionUseCase = new AuctionUseCase(
+  const userRepository = createUserRepository(databaseClint);
+  const auctionRepository = createAuctionRepository(databaseClint);
+  const bidRepository = createBidRepository(databaseClint);
+  const auctionUseCase = createAuctionUseCase(
     auctionRepository,
     bidRepository,
     auctionService
   );
   return {
     controller: {
-      auction: new AuctionController(auctionUseCase),
+      auction: createAuctionController(auctionUseCase),
     },
     middleware: {
-      authentication: new AuthenticationMiddleware(userRepository),
+      authentication: createAuthenticationMiddleware(userRepository),
     },
   };
 };
