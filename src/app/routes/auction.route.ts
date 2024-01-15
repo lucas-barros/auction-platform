@@ -2,16 +2,17 @@ import express from "express";
 
 import { authorizationMiddleware } from "../middlewares/authorization";
 
-import { AuctionParamsDTO, PlaceBidParamsDTO } from "../dtos/auction.dto";
 import { Container } from "../container";
 import { createAuctionController } from "../controllers/auction.controller";
 import { createAuctionUseCase } from "../../domain/use-cases/auction.case";
 import { auctionService } from "../../domain/services/auction.service";
+import { AuctionView } from "../views/auction.view";
+import { AuctionParams, PlaceBidParams } from "../dtos/auction.dto";
 
-export const router = (container: Container) => {
+export const router = (container: Container, view: AuctionView) => {
   const router = express.Router();
   const useCase = createAuctionUseCase(container.repository, auctionService);
-  const auctionController = createAuctionController(useCase);
+  const auctionController = createAuctionController(useCase, view);
 
   router.use(container.middleware.authentication.basicAuthMiddleware);
 
@@ -21,13 +22,13 @@ export const router = (container: Container) => {
     auctionController.create
   );
 
-  router.post<PlaceBidParamsDTO>(
+  router.post<PlaceBidParams>(
     "/:id/bid",
     authorizationMiddleware.canBid,
     auctionController.placeBid
   );
 
-  router.get<AuctionParamsDTO>(
+  router.get<AuctionParams>(
     "/:id",
     authorizationMiddleware.canViewAuction,
     auctionController.getById

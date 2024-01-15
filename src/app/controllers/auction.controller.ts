@@ -2,36 +2,37 @@ import { Request, Response } from "express";
 import { AuctionUseCase } from "../../domain/use-cases/auction.case";
 import { AuctionException } from "../../domain/exceptions/auction.exception";
 import {
-  AuctionParamsDTO,
-  AuctionResponseDTO,
-  CreateAuctionRequestDTO,
-  CreateAuctionResponseDTO,
-  PlaceBidParamsDTO,
-  PlaceBidRequestDTO,
-  PlaceBidResponseDTO,
+  AuctionView,
+  CreateAuctionView,
+  GetByIdView,
+  PlaceBidView,
+} from "../views/auction.view";
+import {
+  CreateAuctionRequest,
+  PlaceBidParams,
+  PlaceBidRequest,
+  AuctionParams,
 } from "../dtos/auction.dto";
 
 const INTERNAL_ERROR = "Internal server error";
 
 export interface AuctionController {
   create(
-    req: Request<{}, {}, CreateAuctionRequestDTO>,
-    res: Response<CreateAuctionResponseDTO>
+    req: Request<{}, {}, CreateAuctionRequest>,
+    res: Response<CreateAuctionView>
   ): void;
 
   placeBid(
-    req: Request<PlaceBidParamsDTO, {}, PlaceBidRequestDTO>,
-    res: Response<PlaceBidResponseDTO>
+    req: Request<PlaceBidParams, {}, PlaceBidRequest>,
+    res: Response<PlaceBidView>
   ): void;
 
-  getById(
-    req: Request<AuctionParamsDTO>,
-    res: Response<AuctionResponseDTO>
-  ): void;
+  getById(req: Request<AuctionParams>, res: Response<GetByIdView>): void;
 }
 
 export const createAuctionController = (
-  useCase: AuctionUseCase
+  useCase: AuctionUseCase,
+  view: AuctionView
 ): AuctionController => {
   return {
     create: (req, res) => {
@@ -39,14 +40,14 @@ export const createAuctionController = (
       const result = useCase.create({ title, endTime });
 
       if (result.isOk()) {
-        res.status(201).json({ id: result.value });
+        res.status(201).send(view.create(result.value));
         return;
       }
       if (result.error === AuctionException.InvalidData) {
-        res.status(400).json({ error: result.error });
+        res.status(400).send(view.error(result.error));
         return;
       }
-      res.status(500).json({ error: INTERNAL_ERROR });
+      res.status(500).send(view.error(INTERNAL_ERROR));
     },
 
     placeBid: (req, res) => {
@@ -56,21 +57,21 @@ export const createAuctionController = (
       const result = useCase.placeBid({ username, auctionId, value });
 
       if (result.isOk()) {
-        res.status(201).json();
+        res.status(201).send();
         return;
       }
       if (result.error === AuctionException.NotFound) {
-        res.status(404).json({ error: result.error });
+        res.status(404).send(view.error(result.error));
         return;
       }
       if (
         result.error === AuctionException.InvalidData ||
         result.error === AuctionException.AuctionEnded
       ) {
-        res.status(400).json({ error: result.error });
+        res.status(400).send(view.error(result.error));
         return;
       }
-      res.status(500).json({ error: INTERNAL_ERROR });
+      res.status(500).send(view.error(INTERNAL_ERROR));
     },
 
     getById: (req, res) => {
@@ -78,18 +79,18 @@ export const createAuctionController = (
       const result = useCase.getById(auctionId);
 
       if (result.isOk()) {
-        res.status(200).json(result.value);
+        res.status(200).send(view.getById(result.value));
         return;
       }
       if (result.error === AuctionException.NotFound) {
-        res.status(404).json({ error: result.error });
+        res.status(404).send(view.error(result.error));
         return;
       }
       if (result.error === AuctionException.InvalidData) {
-        res.status(400).json({ error: result.error });
+        res.status(400).send(view.error(result.error));
         return;
       }
-      res.status(500).json({ error: INTERNAL_ERROR });
+      res.status(500).send(view.error(INTERNAL_ERROR));
     },
   };
 };

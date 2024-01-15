@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AuctionParamsDTO, PlaceBidParamsDTO } from "../dtos/auction.dto";
+import { AuctionParams, PlaceBidParams } from "../dtos/auction.dto";
 
 export const FAILED_AUTHORIZATION = "Failed Authorization";
 
@@ -16,11 +16,7 @@ export const authorizationMiddleware = {
 
     next();
   },
-  canViewAuction(
-    _: Request<AuctionParamsDTO>,
-    res: Response,
-    next: NextFunction
-  ) {
+  canViewAuction(_: Request<AuctionParams>, res: Response, next: NextFunction) {
     if (
       !res.locals.permissions?.find(
         (permission: string) => permission === "view_auction"
@@ -32,7 +28,7 @@ export const authorizationMiddleware = {
 
     next();
   },
-  canBid(_: Request<PlaceBidParamsDTO>, res: Response, next: NextFunction) {
+  canBid(_: Request<PlaceBidParams>, res: Response, next: NextFunction) {
     if (
       !res.locals.permissions?.find(
         (permission: string) => permission === "bid"

@@ -1,11 +1,10 @@
 import { Err, Ok, Result } from "ts-results-es";
-import { Auction } from "../entities/auction.entity";
+import { Auction, AuctionJson } from "../entities/auction.entity";
 import { AuctionRepository } from "../repositories/auction.repository";
 import { AuctionException } from "../exceptions/auction.exception";
 import { Bid } from "../entities/bid.entity";
 import { BidRepository } from "../repositories/bid.repository";
 import { AuctionService } from "../services/auction.service";
-import { AuctionResponseDTO } from "../../app/dtos/auction.dto";
 
 export interface AuctionUseCase {
   create: (payload: {
@@ -17,7 +16,7 @@ export interface AuctionUseCase {
     auctionId: string;
     value: number;
   }) => Result<string, AuctionException>;
-  getById: (id: string) => Result<AuctionResponseDTO, AuctionException>;
+  getById: (id: string) => Result<AuctionJson, AuctionException>;
 }
 
 export const createAuctionUseCase = (

@@ -1,5 +1,12 @@
 import { v4 } from "uuid";
 
+export interface AuctionJson {
+  id: string;
+  title: string;
+  endTime: string;
+  winnerUsername: string | null;
+}
+
 export class Auction {
   private id: string;
   private title: string;
@@ -43,7 +50,7 @@ export class Auction {
     this.winnerUsername = winnerUsername;
   }
 
-  toJson() {
+  toJson(): AuctionJson {
     return {
       id: this.id,
       title: this.title,

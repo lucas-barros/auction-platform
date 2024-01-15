@@ -1,33 +1,31 @@
-export interface CreateAuctionRequestDTO {
+import { AuctionJson } from "../../domain/entities/auction.entity";
+
+export interface Error {
+  error: string;
+}
+export interface CreateAuctionRequest {
   title: string;
   endTime: string;
 }
 
-export type CreateAuctionResponseDTO =
+export type CreateAuctionResponse =
   | {
       id: string;
     }
-  | { error: string };
+  | Error;
 
-export interface PlaceBidParamsDTO {
+export interface PlaceBidParams {
   id: string;
 }
 
-export interface PlaceBidRequestDTO {
+export interface PlaceBidRequest {
   value: number;
 }
 
-export type PlaceBidResponseDTO = Record<string, never> | { error: string };
+export type PlaceBidResponse = Record<string, never> | Error;
 
-export interface AuctionParamsDTO {
+export interface AuctionParams {
   id: string;
 }
 
-export type AuctionResponseDTO =
-  | {
-      id: string;
-      title: string;
-      endTime: string;
-      winnerUsername: string | null;
-    }
-  | { error: string };
+export type AuctionResponse = AuctionJson | Error;
