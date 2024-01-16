@@ -2,7 +2,7 @@ import express from "express";
 
 import { authorizationMiddleware } from "../middlewares/authorization";
 
-import { Container } from "../container";
+import { Container } from "../../domain/container";
 import { createAuctionController } from "../controllers/auction.controller";
 import { createAuctionUseCase } from "../../domain/use-cases/auction.case";
 import { auctionService } from "../../domain/services/auction.service";

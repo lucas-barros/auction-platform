@@ -1,20 +1,20 @@
 import {
   AuctionRepository,
   createAuctionRepository,
-} from "../domain/repositories/auction.repository";
+} from "./repositories/auction.repository";
 import {
   BidRepository,
   createBidRepository,
-} from "../domain/repositories/bid.repository";
+} from "./repositories/bid.repository";
 import {
   UserRepository,
   createUserRepository,
-} from "../domain/repositories/user.repository";
+} from "./repositories/user.repository";
 import { IDatabaseClient } from "../infrastructure/database/database";
 import {
   AuthenticationMiddleware,
   createAuthenticationMiddleware,
-} from "./middlewares/authentication";
+} from "../app/middlewares/authentication";
 
 export interface Container {
   repository: {
