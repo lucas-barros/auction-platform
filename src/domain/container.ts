@@ -11,19 +11,12 @@ import {
   createUserRepository,
 } from "./repositories/user.repository";
 import { IDatabaseClient } from "../infrastructure/database/database";
-import {
-  AuthenticationMiddleware,
-  createAuthenticationMiddleware,
-} from "../app/middlewares/authentication";
 
 export interface Container {
   repository: {
     auction: AuctionRepository;
     bid: BidRepository;
     user: UserRepository;
-  };
-  middleware: {
-    authentication: AuthenticationMiddleware;
   };
 }
 
@@ -37,9 +30,6 @@ export const createContainer = (databaseClint: IDatabaseClient): Container => {
       auction: auctionRepository,
       bid: bidRepository,
       user: userRepository,
-    },
-    middleware: {
-      authentication: createAuthenticationMiddleware(userRepository),
     },
   };
 };

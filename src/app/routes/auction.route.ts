@@ -8,13 +8,17 @@ import { createAuctionUseCase } from "../../domain/use-cases/auction.case";
 import { auctionService } from "../../domain/services/auction.service";
 import { AuctionView } from "../views/auction.view";
 import { AuctionParams, PlaceBidParams } from "../dtos/auction.dto";
+import { createAuthenticationMiddleware } from "../middlewares/authentication";
 
 export const router = (container: Container, view: AuctionView) => {
   const router = express.Router();
   const useCase = createAuctionUseCase(container.repository, auctionService);
   const auctionController = createAuctionController(useCase, view);
+  const authentication = createAuthenticationMiddleware(
+    container.repository.user
+  );
 
-  router.use(container.middleware.authentication.basicAuthMiddleware);
+  router.use(authentication.basicAuthMiddleware);
 
   router.post(
     "/",
