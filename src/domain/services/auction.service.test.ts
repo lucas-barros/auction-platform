@@ -1,10 +1,9 @@
 import { Auction } from "../entities/auction.entity";
 import { Bid } from "../entities/bid.entity";
-import { AuctionService } from "./auction.service";
+import { auctionService } from "./auction.service";
 
 describe("AuctionService", () => {
   test("should return null if the auction has no bids", () => {
-    const auctionService = new AuctionService();
     const auction = new Auction({
       id: "1",
       title: "Test Auction",
@@ -18,7 +17,6 @@ describe("AuctionService", () => {
   });
 
   test("should return null if the auction is still ongoing", () => {
-    const auctionService = new AuctionService();
     const auction = new Auction({
       id: "1",
       title: "Test Auction",
@@ -35,7 +33,6 @@ describe("AuctionService", () => {
   });
 
   test("should return the highest bid if the auction has ended", () => {
-    const auctionService = new AuctionService();
     const auction = new Auction({
       id: "1",
       title: "Test Auction",
@@ -53,7 +50,6 @@ describe("AuctionService", () => {
   });
 
   test("should return the first bid with the highest value and earliest timestamp in case of tie", () => {
-    const auctionService = new AuctionService();
     const auction = new Auction({
       id: "1",
       title: "Test Auction",
