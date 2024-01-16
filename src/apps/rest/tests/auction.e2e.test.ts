@@ -1,8 +1,8 @@
 import request from "supertest";
-import { server } from "..";
-import { FAILED_AUTHORIZATION } from "../src/app/middlewares/authorization";
-import { FAILED_AUTHENTICATION } from "../src/app/middlewares/authentication";
-import { AuctionException } from "../src/domain/exceptions/auction.exception";
+import { server } from "../../../..";
+import { FAILED_AUTHORIZATION } from "../middlewares/authorization";
+import { FAILED_AUTHENTICATION } from "../middlewares/authentication";
+import { AuctionException } from "../../../domain/exceptions/auction.exception";
 
 const getAuthHeader = (username: string, password: string) =>
   `Basic ${Buffer.from(`${username}:${password}`).toString("base64")}`;

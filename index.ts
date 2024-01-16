@@ -1,10 +1,10 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import * as YAML from "yamljs";
-import { router as auctionRouter } from "./src/app/routes/auction.route";
+import { router as auctionRouter } from "./src/apps/rest/routes/auction.route";
 import { createContainer } from "./src/domain/container";
 import { inMemoryDatabaseClient } from "./src/infrastructure/database/in-memory/client";
-import { auctionJsonView } from "./src/app/views/auction.view";
+import { auctionJsonView } from "./src/apps/rest/views/auction.view";
 
 const swaggerDocument = YAML.load("./api-spec.yaml");
 

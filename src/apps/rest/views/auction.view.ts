@@ -1,4 +1,4 @@
-import { AuctionJson } from "../../domain/entities/auction.entity";
+import { AuctionJson } from "../../../domain/entities/auction.entity";
 import { AuctionResponse, CreateAuctionResponse, Error } from "../dtos/auction.dto";
 
 export type Html = string;

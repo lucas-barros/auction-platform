@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UserRepository } from "../../domain/repositories/user.repository";
+import { UserRepository } from "../../../domain/repositories/user.repository";
 
 export const FAILED_AUTHENTICATION = "Failed Authentication";
 

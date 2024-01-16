@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AuctionUseCase } from "../../domain/use-cases/auction.case";
-import { AuctionException } from "../../domain/exceptions/auction.exception";
+import { AuctionUseCase } from "../../../domain/use-cases/auction.case";
+import { AuctionException } from "../../../domain/exceptions/auction.exception";
 import {
   AuctionView,
   CreateAuctionView,

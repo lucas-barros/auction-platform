@@ -2,10 +2,10 @@ import express from "express";
 
 import { authorizationMiddleware } from "../middlewares/authorization";
 
-import { Container } from "../../domain/container";
+import { Container } from "../../../domain/container";
 import { createAuctionController } from "../controllers/auction.controller";
-import { createAuctionUseCase } from "../../domain/use-cases/auction.case";
-import { auctionService } from "../../domain/services/auction.service";
+import { createAuctionUseCase } from "../../../domain/use-cases/auction.case";
+import { auctionService } from "../../../domain/services/auction.service";
 import { AuctionView } from "../views/auction.view";
 import { AuctionParams, PlaceBidParams } from "../dtos/auction.dto";
 import { createAuthenticationMiddleware } from "../middlewares/authentication";

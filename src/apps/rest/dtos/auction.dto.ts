@@ -1,4 +1,4 @@
-import { AuctionJson } from "../../domain/entities/auction.entity";
+import { AuctionJson } from "../../../domain/entities/auction.entity";
 
 export interface Error {
   error: string;
