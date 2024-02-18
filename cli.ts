@@ -9,28 +9,33 @@ import { createAuction } from "./src/apps/cli/commands/create-auction.command";
 import { getAuction } from "./src/apps/cli/commands/get-auction.command";
 import { placeBid } from "./src/apps/cli/commands/place-bid.command";
 
-const emitter = new EventEmitter();
-const program = new Command();
 const container = createContainer(inMemoryDatabaseClient);
 
-program.hook("postAction", () => {
-  emitter.emit("idle");
-});
+const createProgram = () => {
+  const program = new Command();
+  program
+    .name("auction")
+    .description("CLI to interact with auction platform")
+    .version("0.8.0");
+
+  createAuction(program, container);
+
+  getAuction(program, container);
+
+  placeBid(program, container);
+
+  return program;
+};
 
 repl.start({
-  eval: (line, _, __, callback) => {
-    emitter.once("idle", callback);
-    program.parse(["", "", ...(parse(line) as string[])]);
+  eval: async (line, _, __, callback) => {
+    try {
+      const program = createProgram();
+      await program.parseAsync(parse(line) as string[], {
+        from: "user",
+      });
+    } catch (error) {
+      callback(error as Error, "");
+    }
   },
 });
-
-program
-  .name("auction")
-  .description("CLI to interact with auction platform")
-  .version("0.8.0");
-
-createAuction(program, container);
-
-getAuction(program, container);
-
-placeBid(program, container);
