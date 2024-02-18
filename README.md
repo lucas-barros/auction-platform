@@ -2,7 +2,7 @@
 
 ## Overview
 
-A REST API, using Typescript/NodeJS implementing a set of endpoints capable of creating auctions, accepting bids, and retrieving information about auctions.
+This project implements a set of features capable of creating auctions, accepting bids, and retrieving information about auctions.
 
 This project was designed with clean architecture principles to create a modular and maintainable code base. This approach helps in keeping the core business logic independent of external frameworks and libraries, making it easier to test and evolve.
 
@@ -71,4 +71,3 @@ Run e2e tests using the following command:
   - `infrastructure`: Infrastructure layer.
     - `database`: Database-related components.
       - `in-memory`: In-memory database implementation.
-- `tests`: Contains end to end tests.

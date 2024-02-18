@@ -2,9 +2,9 @@
   "name": "auction",
   "version": "1.0.0",
   "description": "Auction platform",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "start:cli": "node dist/cli.js",
     "build": "tsc",
     "dev": "tsnd --respawn server.ts",
