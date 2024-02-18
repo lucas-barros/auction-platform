@@ -1,5 +1,5 @@
 import request from "supertest";
-import { server } from "../../../..";
+import { server } from "../../../../server";
 import { FAILED_AUTHORIZATION } from "../middlewares/authorization";
 import { FAILED_AUTHENTICATION } from "../middlewares/authentication";
 import { AuctionException } from "../../../domain/exceptions/auction.exception";
