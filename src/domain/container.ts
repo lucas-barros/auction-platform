@@ -20,10 +20,10 @@ export interface Container {
   };
 }
 
-export const createContainer = (databaseClint: IDatabaseClient): Container => {
-  const userRepository = createUserRepository(databaseClint);
-  const auctionRepository = createAuctionRepository(databaseClint);
-  const bidRepository = createBidRepository(databaseClint);
+export const createContainer = (databaseClient: IDatabaseClient): Container => {
+  const userRepository = createUserRepository(databaseClient);
+  const auctionRepository = createAuctionRepository(databaseClient);
+  const bidRepository = createBidRepository(databaseClient);
 
   return {
     repository: {
