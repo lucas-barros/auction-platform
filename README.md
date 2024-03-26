@@ -6,7 +6,7 @@ This project implements a set of features capable of creating auctions, acceptin
 
 This project was designed with clean architecture principles to create a modular and maintainable code base. This approach helps in keeping the core business logic independent of external frameworks and libraries, making it easier to test and evolve.
 
-Two applications were made for the porpuse of validating the isolation of business logic. A rest API and a CLI.
+Two applications were made for the purpose of validating the isolation of business logic. A rest API and a CLI.
 
 ## Installation
 
